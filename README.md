@@ -1,4 +1,4 @@
-# GitHub Activity CLI
+markdown# GitHub Activity CLI
 
 A command-line tool built in Java that fetches and displays a GitHub user's 
 recent public activity directly in the terminal — pushes, stars, new branches, 
@@ -18,7 +18,7 @@ libraries, and building a simple, robust CLI application.
 ## Usage
 
 ```bash
-java Main <username>
+java Main 
 ```
 
 ### Example
@@ -28,3 +28,45 @@ java Main devonochie
 ```
 
 **Output:**
+Pushed to devonochie/task-tracker-cli
+Pushed to devonochie/task-tracker-cli
+Created a new branch/repo in devonochie/task-tracker-cli
+Pushed to devonochie/SkyStay
+Starred devonochie/SkyStay
+...
+
+## Error Handling
+
+| Scenario                        | Behavior                                         |
+|----------------------------------|---------------------------------------------------|
+| No username provided             | Prints usage instructions                          |
+| Username doesn't exist           | `Error: User '<username>' not found on GitHub.`    |
+| No internet / connection failure | `Error: Could not connect to GitHub...`            |
+| API rate limit exceeded          | `Error: GitHub API rate limit exceeded...`         |
+| User has no recent activity      | `No recent public activity found for '<username>'.`|
+
+## How It Works
+
+1. Builds a request to GitHub's Events API:  
+   `https://api.github.com/users/<username>/events`
+2. Sends the request using Java's built-in `HttpClient` (no external HTTP library).
+3. Manually parses the raw JSON response as text, extracting each event's 
+   `type` and `repo.name` using string search — no JSON library used.
+4. Maps each event type (`PushEvent`, `WatchEvent`, `CreateEvent`, etc.) to a 
+   friendly, readable sentence.
+5. Prints the formatted activity feed to the terminal.
+
+## Constraints
+
+This project intentionally avoids external libraries/frameworks, relying only 
+on Java's built-in `java.net.http.HttpClient` and manual string parsing — as 
+required by the original project brief.
+
+## Tech Stack
+
+- Java (no external dependencies)
+
+---
+*This project is based on the [GitHub User Activity](https://roadmap.sh/projects/github-user-activity) 
+challenge from [roadmap.sh](https://roadmap.sh).*
+Same naming convention advice as before — I'd suggest github-activity-cli a
